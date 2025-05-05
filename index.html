@@ -1,111 +1,117 @@
-<!DOCTYPE html><html lang="bn">
+<!DOCTYPE html>
+<html lang="bn">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ওয়াটারমার্ক জেনারেটর</title>
   <style>
-    @import url('https://cdn.rawgit.com/sh4hids/bangla-web-fonts/bensen-handwriting/stylesheet.css');body {
-  font-family: 'BenSenHandwriting', sans-serif;
-  background: #f2f2f2;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.container {
-  background: white;
-  padding: 30px;
-  border-radius: 15px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-  max-width: 600px;
-  width: 100%;
-}
-h2 {
-  text-align: center;
-  margin-bottom: 20px;
-  color: #333;
-}
-label {
-  display: block;
-  margin: 10px 0 5px;
-  color: #555;
-}
-input, select, button {
-  padding: 10px;
-  width: 100%;
-  box-sizing: border-box;
-  margin-bottom: 15px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-family: 'BenSenHandwriting', sans-serif;
-}
-button {
-  background-color: #4CAF50;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-}
-button:hover {
-  background-color: #45a049;
-}
-canvas {
-  margin-top: 30px;
-  border: 1px solid #ccc;
-  background: white;
-}
-.plus-btn {
-  display: inline-block;
-  width: 35px;
-  height: 35px;
-  font-size: 22px;
-  font-weight: bold;
-  text-align: center;
-  line-height: 35px;
-  cursor: pointer;
-  background: #ddd;
-  border: 1px solid #aaa;
-  border-radius: 50%;
-  margin-bottom: 10px;
-}
+    @import url('https://cdn.rawgit.com/sh4hids/bangla-web-fonts/bensen-handwriting/stylesheet.css');
 
+    body {
+      font-family: 'BenSenHandwriting', sans-serif;
+      background: #f2f2f2;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      max-width: 600px;
+      width: 100%;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    label {
+      display: block;
+      margin: 10px 0 5px;
+      color: #555;
+    }
+    input, select, button {
+      padding: 10px;
+      width: 100%;
+      box-sizing: border-box;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-family: 'BenSenHandwriting', sans-serif;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    canvas {
+      margin: 30px auto;
+      display: block;
+      border: 1px solid #ccc;
+      background: white;
+    }
+    .plus-btn {
+      display: inline-block;
+      width: 35px;
+      height: 35px;
+      font-size: 22px;
+      font-weight: bold;
+      text-align: center;
+      line-height: 35px;
+      cursor: pointer;
+      background: #ddd;
+      border: 1px solid #aaa;
+      border-radius: 50%;
+      margin-bottom: 10px;
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <h2>ওয়াটারমার্ক জেনারেটর</h2><label for="bgLines">ব্যাকগ্রাউন্ড লাইনের সংখ্যা:</label>
-<input type="number" id="bgLines" value="5" min="1">
+    <h2>ওয়াটারমার্ক জেনারেটর</h2>
 
-<label for="bgFontSize">ব্যাকগ্রাউন্ড ফন্ট সাইজ (px):</label>
-<input type="number" id="bgFontSize" value="40">
+    <label for="bgLines">ব্যাকগ্রাউন্ড লাইনের সংখ্যা:</label>
+    <input type="number" id="bgLines" value="5" min="1">
 
-<label for="bgBold">ব্যাকগ্রাউন্ড বোল্ড হবে?</label>
-<select id="bgBold">
-  <option value="normal">না</option>
-  <option value="bold">হ্যাঁ</option>
-</select>
+    <label for="bgFontSize">ব্যাকগ্রাউন্ড ফন্ট সাইজ (px):</label>
+    <input type="number" id="bgFontSize" value="40">
 
-<label for="bgText">ব্যাকগ্রাউন্ডে কি লিখবেন:</label>
-<input type="text" id="bgText" placeholder="উদাহরণ: কপি" >
+    <label for="bgBold">ব্যাকগ্রাউন্ড বোল্ড হবে?</label>
+    <select id="bgBold">
+      <option value="normal">না</option>
+      <option value="bold">হ্যাঁ</option>
+    </select>
 
-<label>ফরগ্রাউন্ড লিখা:</label>
-<div id="fgContainer">
-  <input type="text" class="fgText" placeholder="আপনার লিখা লিখুন">
-</div>
-<div class="plus-btn" onclick="addForegroundInput()">+</div>
+    <label for="bgText">ব্যাকগ্রাউন্ডে কি লিখবেন:</label>
+    <input type="text" id="bgText" placeholder="উদাহরণ: কপি" >
 
-<label for="fgFontSize">ফরগ্রাউন্ড ফন্ট সাইজ (px):</label>
-<input type="number" id="fgFontSize" value="100">
+    <label>ফরগ্রাউন্ড লিখা:</label>
+    <div id="fgContainer">
+      <input type="text" class="fgText" placeholder="আপনার লিখা লিখুন">
+    </div>
+    <div class="plus-btn" onclick="addForegroundInput()">+</div>
 
-<label for="fgBold">ফরগ্রাউন্ড বোল্ড হবে?</label>
-<select id="fgBold">
-  <option value="normal">না</option>
-  <option value="bold">হ্যাঁ</option>
-</select>
+    <label for="fgFontSize">ফরগ্রাউন্ড ফন্ট সাইজ (px):</label>
+    <input type="number" id="fgFontSize" value="100">
 
-<button onclick="generateImage()">Generate</button>
-<button id="downloadBtn" onclick="downloadImage()" disabled>Download Image</button>
+    <label for="fgBold">ফরগ্রাউন্ড বোল্ড হবে?</label>
+    <select id="fgBold">
+      <option value="normal">না</option>
+      <option value="bold">হ্যাঁ</option>
+    </select>
 
-  </div><canvas id="outputCanvas" width="2480" height="3508"></canvas>
+    <button onclick="generateImage()">Generate</button>
+    <button id="downloadBtn" onclick="downloadImage()" disabled>Download Image</button>
+  </div>
+
+  <canvas id="outputCanvas" width="2480" height="3508"></canvas>
 
   <script>
     function addForegroundInput() {
@@ -152,6 +158,7 @@ canvas {
       ctx.font = `${fgBold} ${fgFontSize}px BenSenHandwriting`;
       ctx.fillStyle = "black";
       ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
 
       const centerX = canvas.width / 2;
       let startY = canvas.height / 2 - ((fgTexts.length - 1) * fgFontSize * 1.2) / 2;
@@ -169,5 +176,6 @@ canvas {
       link.href = canvas.toDataURL("image/png", 1.0);
       link.click();
     }
-  </script></body>
+  </script>
+</body>
 </html>
