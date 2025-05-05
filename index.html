@@ -56,6 +56,10 @@
       display: block;
       border: 1px solid #ccc;
       background: white;
+
+      /* A4 Actual size = 2480x3508, scaled down ~25% */
+      width: 595px;
+      height: 842px;
     }
     .plus-btn {
       display: inline-block;
@@ -90,7 +94,7 @@
     </select>
 
     <label for="bgText">ব্যাকগ্রাউন্ডে কি লিখবেন:</label>
-    <input type="text" id="bgText" placeholder="উদাহরণ: কপি" >
+    <input type="text" id="bgText" placeholder="উদাহরণ: কপি">
 
     <label>ফরগ্রাউন্ড লিখা:</label>
     <div id="fgContainer">
@@ -111,6 +115,7 @@
     <button id="downloadBtn" onclick="downloadImage()" disabled>Download Image</button>
   </div>
 
+  <!-- A4 Full Resolution -->
   <canvas id="outputCanvas" width="2480" height="3508"></canvas>
 
   <script>
@@ -138,7 +143,7 @@
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Background
+      // Background Watermark
       ctx.save();
       ctx.translate(canvas.width / 2, canvas.height / 2);
       ctx.rotate(-Math.PI / 4);
@@ -154,7 +159,7 @@
       }
       ctx.restore();
 
-      // Foreground
+      // Foreground Text
       ctx.font = `${fgBold} ${fgFontSize}px BenSenHandwriting`;
       ctx.fillStyle = "black";
       ctx.textAlign = "center";
