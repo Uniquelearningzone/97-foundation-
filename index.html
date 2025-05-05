@@ -1,77 +1,145 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html><html lang="bn">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Watermark Generator</title>
+  <title>ওয়াটারমার্ক জেনারেটর</title>
   <style>
     @import url('https://cdn.rawgit.com/sh4hids/bangla-web-fonts/bensen-handwriting/stylesheet.css');body {
   font-family: 'BenSenHandwriting', sans-serif;
-  margin: 20px;
+  background: #f2f2f2;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.container {
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  max-width: 600px;
+  width: 100%;
+}
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
 }
 label {
   display: block;
   margin: 10px 0 5px;
+  color: #555;
 }
-input, select {
-  padding: 5px;
+input, select, button {
+  padding: 10px;
   width: 100%;
-  max-width: 300px;
+  box-sizing: border-box;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-family: 'BenSenHandwriting', sans-serif;
+}
+button {
+  background-color: #4CAF50;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #45a049;
 }
 canvas {
-  margin-top: 20px;
+  margin-top: 30px;
   border: 1px solid #ccc;
+  background: white;
 }
-#downloadBtn {
-  margin-top: 10px;
+.plus-btn {
+  display: inline-block;
+  width: 35px;
+  height: 35px;
+  font-size: 22px;
+  font-weight: bold;
+  text-align: center;
+  line-height: 35px;
+  cursor: pointer;
+  background: #ddd;
+  border: 1px solid #aaa;
+  border-radius: 50%;
+  margin-bottom: 10px;
 }
 
   </style>
 </head>
 <body>
-  <h2>Watermark Generator</h2><label for="bgLines">Number of Background Lines:</label> <input type="number" id="bgLines" value="5" min="1">
+  <div class="container">
+    <h2>ওয়াটারমার্ক জেনারেটর</h2><label for="bgLines">ব্যাকগ্রাউন্ড লাইনের সংখ্যা:</label>
+<input type="number" id="bgLines" value="5" min="1">
 
-<label for="bgFontSize">Background Font Size (px):</label> <input type="number" id="bgFontSize" value="40">
+<label for="bgFontSize">ব্যাকগ্রাউন্ড ফন্ট সাইজ (px):</label>
+<input type="number" id="bgFontSize" value="40">
 
-<label for="bgBold">Background Bold:</label> <select id="bgBold"> <option value="normal">No</option> <option value="bold">Yes</option> </select>
+<label for="bgBold">ব্যাকগ্রাউন্ড বোল্ড হবে?</label>
+<select id="bgBold">
+  <option value="normal">না</option>
+  <option value="bold">হ্যাঁ</option>
+</select>
 
-<label for="bgText">Background Text:</label> <input type="text" id="bgText" value="১৭ ফাউন্ডেশন">
+<label for="bgText">ব্যাকগ্রাউন্ডে কি লিখবেন:</label>
+<input type="text" id="bgText" placeholder="উদাহরণ: কপি" >
 
-<label for="fgText">Foreground Text:</label> <input type="text" id="fgText" value="১৭ ফাউন্ডেশন">
+<label>ফরগ্রাউন্ড লিখা:</label>
+<div id="fgContainer">
+  <input type="text" class="fgText" placeholder="আপনার লিখা লিখুন">
+</div>
+<div class="plus-btn" onclick="addForegroundInput()">+</div>
 
-<label for="fgFontSize">Foreground Font Size (px):</label> <input type="number" id="fgFontSize" value="100">
+<label for="fgFontSize">ফরগ্রাউন্ড ফন্ট সাইজ (px):</label>
+<input type="number" id="fgFontSize" value="100">
 
-<label for="fgBold">Foreground Bold:</label> <select id="fgBold"> <option value="normal">No</option> <option value="bold">Yes</option> </select>
+<label for="fgBold">ফরগ্রাউন্ড বোল্ড হবে?</label>
+<select id="fgBold">
+  <option value="normal">না</option>
+  <option value="bold">হ্যাঁ</option>
+</select>
 
-<button onclick="generateImage()">Generate</button> <button id="downloadBtn" onclick="downloadImage()" disabled>Download Image</button>
+<button onclick="generateImage()">Generate</button>
+<button id="downloadBtn" onclick="downloadImage()" disabled>Download Image</button>
 
-<canvas id="outputCanvas" width="2480" height="3508"></canvas> <!-- A4 size at 300 DPI -->
+  </div><canvas id="outputCanvas" width="2480" height="3508"></canvas>
 
   <script>
+    function addForegroundInput() {
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.className = 'fgText';
+      input.placeholder = 'আরও একটি লাইন লিখুন';
+      input.style.marginTop = '5px';
+      document.getElementById('fgContainer').appendChild(input);
+    }
+
     function generateImage() {
       const canvas = document.getElementById("outputCanvas");
       const ctx = canvas.getContext("2d");
 
-      // Get inputs
       const bgLines = parseInt(document.getElementById("bgLines").value);
       const bgFontSize = parseInt(document.getElementById("bgFontSize").value);
       const bgBold = document.getElementById("bgBold").value;
       const bgText = document.getElementById("bgText").value;
 
-      const fgText = document.getElementById("fgText").value;
+      const fgTexts = Array.from(document.getElementsByClassName("fgText")).map(input => input.value).filter(text => text.trim() !== "");
       const fgFontSize = parseInt(document.getElementById("fgFontSize").value);
       const fgBold = document.getElementById("fgBold").value;
 
-      // Clear canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Draw Background
+      // Background
       ctx.save();
       ctx.translate(canvas.width / 2, canvas.height / 2);
-      ctx.rotate(-Math.PI / 4); // 45 degrees angle
+      ctx.rotate(-Math.PI / 4);
       ctx.font = `${bgBold} ${bgFontSize}px BenSenHandwriting`;
       ctx.fillStyle = "#cccccc";
       ctx.textAlign = "center";
-
+      ctx.textBaseline = "middle";
       const gap = canvas.height / bgLines;
       for (let i = -canvas.height; i < canvas.height * 2; i += gap) {
         for (let j = -canvas.width; j < canvas.width * 2; j += 400) {
@@ -80,11 +148,16 @@ canvas {
       }
       ctx.restore();
 
-      // Draw Foreground
+      // Foreground
       ctx.font = `${fgBold} ${fgFontSize}px BenSenHandwriting`;
       ctx.fillStyle = "black";
       ctx.textAlign = "center";
-      ctx.fillText(fgText, canvas.width / 2, canvas.height / 2);
+
+      const centerX = canvas.width / 2;
+      let startY = canvas.height / 2 - ((fgTexts.length - 1) * fgFontSize * 1.2) / 2;
+      fgTexts.forEach((text, i) => {
+        ctx.fillText(text, centerX, startY + i * fgFontSize * 1.2);
+      });
 
       document.getElementById("downloadBtn").disabled = false;
     }
